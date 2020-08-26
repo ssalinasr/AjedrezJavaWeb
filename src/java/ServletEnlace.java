@@ -122,9 +122,13 @@ public class ServletEnlace extends HttpServlet {
                     String comando_pos = comando_div[1];
                     System.out.println(comando_pos);
                     boolean resultado = j.movJug1(comando_pos);
+                    boolean matej1 = j.mate_j1;
+                    boolean matej2 = j.mate_j2;
                 try (PrintWriter out = response.getWriter()) {
                     out.println("{");
-                    out.println("\"resultado\":\""+resultado+"\"");
+                    out.println("\"resultado\":\""+resultado+"\",");
+                    out.println("\"mate_1\":\""+matej1+"\",");
+                    out.println("\"mate_2\":\""+matej2+"\"");
                     out.println("}");          
                  }  
                 }
@@ -134,9 +138,13 @@ public class ServletEnlace extends HttpServlet {
                         String[] comando_div = comando.split(":");
                         String comando_pos = comando_div[1];
                         boolean resultado = j.movJug2(comando_pos);
+                        boolean matej1 = j.mate_j1;
+                        boolean matej2 = j.mate_j2;
                         try (PrintWriter out = response.getWriter()) {
                             out.println("{");
-                            out.println("\"resultado\":\""+resultado+"\"");
+                            out.println("\"resultado\":\""+resultado+"\",");
+                            out.println("\"mate_1\":\""+matej1+"\",");
+                            out.println("\"mate_2\":\""+matej2+"\"");
                             out.println("}");          
                  }  
                     }

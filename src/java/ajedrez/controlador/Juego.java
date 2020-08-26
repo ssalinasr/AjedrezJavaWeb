@@ -36,157 +36,14 @@ public class Juego {
         j2 = new Jugador(false);
         ReyBlanco = t.getRey("blanco");
         ReyNegro= t.getRey("negro");
+        mate_j1 = false;
+        mate_j2 = false;
     }
     
     public Ficha[][] obtenerTablero(){
         return t.getFichas();
     }
-    
-    public void iniciarJuego(){
-        t.imprimirTablero();
-
-       
-        while(!mate_j1 || !mate_j2){
-            Scanner n = new Scanner(System.in);
-
-            //hayJaque(ReyBlanco);
-            //hayJaque(ReyNegro);
-            
-            //Las coordenadas se ponen según la posición de la ficha: x = vertical, y = horizontal
-            
-            if(jaqueBlanco){
-                System.out.println("El rey está en jaque, debe moverlo o taparlo");
-            }
-            System.out.println("Ficha a mover, jugador 1");
-  
-            //Movimientos para el jugador 1
-            int j1_x = n.nextInt();
-            int j1_y = n.nextInt();
-            
-            while(j1_x < 0 || j1_x > 7 || j1_y < 0 || j1_y > 7 || t.getFicha(new Point(j1_x,j1_y)) == null){
-                System.out.println("Esas coordenadas no existen...");
-                j1_x = n.nextInt();
-                j1_y = n.nextInt();
-           }
-            
-            if(j1_x == -1 && j1_y==-1) break;
-            Ficha verf_j1 = t.getFicha(new Point(j1_x,j1_y));
-          
-            while(!verf_j1.getColor().equals("blanco")){
-                System.out.println("Esa ficha no es del jugador 1...");
-                j1_x = n.nextInt();
-                j1_y = n.nextInt();          
-                verf_j1 = t.getFicha(new Point(j1_x,j1_y));
-                }
-            
-            System.out.println("Movimientos disponibles:");
-            ArrayList<Point> pmvs_j1 = t.mirarMovimientos(j1_x, j1_y, t);
-            while(pmvs_j1.isEmpty()){
-                System.out.println("Esa ficha no tiene movimientos disponibles...");
-                j1_x = n.nextInt();
-                j1_y = n.nextInt();
-                verf_j1 = t.getFicha(new Point(j1_x,j1_y));
-                System.out.println("Movimientos disponibles:");
-                pmvs_j1 = t.mirarMovimientos(j1_x, j1_y, t);
-            }
-            
-            int j1_x2 = n.nextInt();
-            int j1_y2 = n.nextInt();
-            
-            moverFichaEnTablero(new Point(j1_x2,j1_y2),verf_j1);
-            
-            while(moverJaque(ReyBlanco)||pmvs_j1.isEmpty()){
-                if(pmvs_j1.isEmpty()){
-                    System.out.println("Esa ficha no tiene movimientos disponibles...");
-                }else{
-                    System.out.println("Ese movimiento deja al rey en jaque");
-                    moverFichaEnTablero(new Point(j1_x,j1_y),verf_j1);
-                }
-                j1_x = n.nextInt();
-                j1_y = n.nextInt();
-                verf_j1 = t.getFicha(new Point(j1_x,j1_y));
-                System.out.println("Movimientos disponibles:");
-                pmvs_j1 = t.mirarMovimientos(j1_x, j1_y, t);
-                if(!pmvs_j1.isEmpty()){
-                    j1_x2 = n.nextInt();
-                    j1_y2 = n.nextInt();
-                    moverFichaEnTablero(new Point(j1_x2,j1_y2),verf_j1);
-                }
-            }
-        
-            //moverFichaEnTablero(new Point(j1_x2,j1_y2),verf_j1);
-
-            t.imprimirTablero();
-            
-            jaqueNegro=hayJaque(t.getFicha(new Point(j1_x2,j1_y2)),ReyNegro);
-            if(jaqueNegro){
-                System.out.println("El rey está en jaque, debe moverlo o taparlo");
-            }
-            System.out.println("Ficha a mover, jugador 2");
-
-            //Movimientos jugador 2
-            int j2_x = n.nextInt();
-            int j2_y = n.nextInt(); 
-            
-            while(j2_x < 0 || j2_x > 7 || j2_y < 0 || j2_y > 7 || t.getFicha(new Point(j2_x,j2_y)) == null){
-                System.out.println("Esas coordenadas no existen...");
-                j2_x = n.nextInt();
-                j2_y = n.nextInt();
-             }
-            
-            if(j2_x == -1 && j2_y==-1) break;
-            Ficha verf_j2 = t.getFicha(new Point(j2_x,j2_y));
       
-            while(!verf_j2.getColor().equals("negro")){
-                System.out.println("Esa ficha no es del jugador 2...");
-                j2_x = n.nextInt();
-                j2_y = n.nextInt();          
-                verf_j2 = t.getFicha(new Point(j2_x,j2_y));
-                }
-                   
-            System.out.println("Movimientos disponibles:");
-            ArrayList<Point> pmvs_j2 = t.mirarMovimientos(j2_x, j2_y, t);
-            while(pmvs_j2.isEmpty()){
-                System.out.println("Esa ficha no tiene movimientos disponibles...");
-                j2_x = n.nextInt();
-                j2_y = n.nextInt();
-                verf_j2 = t.getFicha(new Point(j2_x,j2_y));
-                System.out.println("Movimientos disponibles:");
-                pmvs_j2 = t.mirarMovimientos(j2_x, j2_y, t);
-            }
-            
-            int j2_x2 = n.nextInt();
-            int j2_y2 = n.nextInt();
-            
-            moverFichaEnTablero(new Point(j2_x2,j2_y2),verf_j2);
-            
-             while(moverJaque(ReyNegro)||pmvs_j2.isEmpty()){
-                if(pmvs_j2.isEmpty()){
-                    System.out.println("Esa ficha no tiene movimientos disponibles...");
-                }else{
-                    System.out.println("Ese movimiento deja al rey en jaque");
-                    moverFichaEnTablero(new Point(j2_x,j2_y),verf_j2);
-                }
-                j2_x = n.nextInt();
-                j2_y = n.nextInt();
-                verf_j2 = t.getFicha(new Point(j2_x,j2_y));
-                System.out.println("Movimientos disponibles:");
-                pmvs_j2 = t.mirarMovimientos(j2_x, j2_y, t);
-                if(!pmvs_j2.isEmpty()){
-                    j2_x2 = n.nextInt();
-                    j2_y2 = n.nextInt();
-                    moverFichaEnTablero(new Point(j2_x2,j2_y2),verf_j2);
-                }
-
-            }
-            
-            //moverFichaEnTablero(new Point(j2_x2,j2_y2),verf_j2);
-            jaqueBlanco=hayJaque(t.getFicha(new Point(j2_x2,j2_y2)),ReyBlanco);
-
-            t.imprimirTablero();
-        }   
-    }
-    
     public ArrayList<Integer> coordenadas(String comando){
         ArrayList<Integer> cord = new ArrayList<>();
         String[] comando_split = comando.split(",");
@@ -240,7 +97,8 @@ public class Juego {
     
     public boolean movJug1(String comando){
         if(jaqueBlanco){
-                System.out.println("El rey está en jaque, debe moverlo o taparlo");
+            System.out.println("El rey está en jaque, debe moverlo o taparlo");
+
             }
             System.out.println("Ficha a mover, jugador 1");
             
@@ -275,35 +133,32 @@ public class Juego {
                 System.out.println("Ese movimiento no es posible para esa ficha...");
                 return false;
             }
-            
+                       
             moverFichaEnTablero(new Point(j1_x2,j1_y2),verf_j1);
-            /*
-            while(moverJaque(ReyBlanco)||pmvs_j1.isEmpty()){
-                if(pmvs_j1.isEmpty()){
-                    System.out.println("Esa ficha no tiene movimientos disponibles...");
-                }else{
-                    System.out.println("Ese movimiento deja al rey en jaque");
-                    moverFichaEnTablero(new Point(j1_x,j1_y),verf_j1);
-                }
-                j1_x = n.nextInt();
-                j1_y = n.nextInt();
-                verf_j1 = t.getFicha(new Point(j1_x,j1_y));
-                System.out.println("Movimientos disponibles:");
-                pmvs_j1 = t.mirarMovimientos(j1_x, j1_y, t);
-                if(!pmvs_j1.isEmpty()){
-                    j1_x2 = n.nextInt();
-                    j1_y2 = n.nextInt();
-                    moverFichaEnTablero(new Point(j1_x2,j1_y2),verf_j1);
-                }
+            
+            if(moverJaque(ReyBlanco)){
+                System.out.println("Debe devolverse...");
+                System.out.println("Debe devolverse...");
+                t.colocarFicha(new Point(j1_x,j1_y), verf_j1);
+                System.out.println("Ficha colocada en: " + new Point(j1_x,j1_y));
+                t.removerFicha(verf_j1.getPosicion(), verf_j1);
+                System.out.println("Ficha removida de: "+ verf_j1.getPosicion());
+                t.actualizarPosFicha(new Point(j1_x , j1_y));
+                return false;
             }
-        */
+            
         jaqueNegro=hayJaque(t.getFicha(new Point(j1_x2,j1_y2)),ReyNegro);
+        if(this.hayMate(ReyNegro) && jaqueNegro){
+            System.out.println(this.hayMate(ReyNegro));
+            this.mate_j1 = true;
+        }
         return true;
     }
     
     public boolean movJug2(String comando){
             if(jaqueNegro){
                 System.out.println("El rey está en jaque, debe moverlo o taparlo");
+
             }
             System.out.println("Ficha a mover, jugador 2");
             ArrayList<Integer> cord = this.coordenadas(comando);
@@ -339,30 +194,23 @@ public class Juego {
             }
             
             moverFichaEnTablero(new Point(j2_x2,j2_y2),verf_j2);
-            /*
-             while(moverJaque(ReyNegro)||pmvs_j2.isEmpty()){
-                if(pmvs_j2.isEmpty()){
-                    System.out.println("Esa ficha no tiene movimientos disponibles...");
-                }else{
-                    System.out.println("Ese movimiento deja al rey en jaque");
-                    moverFichaEnTablero(new Point(j2_x,j2_y),verf_j2);
-                }
-                j2_x = n.nextInt();
-                j2_y = n.nextInt();
-                verf_j2 = t.getFicha(new Point(j2_x,j2_y));
-                System.out.println("Movimientos disponibles:");
-                pmvs_j2 = t.mirarMovimientos(j2_x, j2_y, t);
-                if(!pmvs_j2.isEmpty()){
-                    j2_x2 = n.nextInt();
-                    j2_y2 = n.nextInt();
-                    moverFichaEnTablero(new Point(j2_x2,j2_y2),verf_j2);
-                }
-
-            }
-            */
-            //moverFichaEnTablero(new Point(j2_x2,j2_y2),verf_j2);
-            jaqueBlanco=hayJaque(t.getFicha(new Point(j2_x2,j2_y2)),ReyBlanco);
             
+            if(moverJaque(ReyNegro)){
+                System.out.println("Debe devolverse...");
+                System.out.println("Debe devolverse...");
+                t.colocarFicha(new Point(j2_x,j2_y), verf_j2);
+                System.out.println("Ficha colocada en: " + new Point(j2_x,j2_y));
+                t.removerFicha(verf_j2.getPosicion(), verf_j2);
+                System.out.println("Ficha removida de: "+ verf_j2.getPosicion());
+                t.actualizarPosFicha(new Point(j2_x , j2_y));
+                return false;
+            }
+            
+            jaqueBlanco=hayJaque(t.getFicha(new Point(j2_x2,j2_y2)),ReyBlanco);
+            if(this.hayMate(ReyBlanco) && jaqueBlanco){
+                    System.out.println(this.hayMate(ReyBlanco));
+                    this.mate_j2 = true;
+            }
         return true;
     }
     
@@ -458,6 +306,38 @@ public class Juego {
             return true;
         }
         return false;
+    }
+    
+    public boolean hayMate(Ficha Rey){
+        ArrayList<Point> movRey = new ArrayList<>();
+        ArrayList<Integer> posible = new ArrayList<>();
+        Point pos = Rey.getPosicion();
+        movRey = t.mirarMovimientos(pos.x, pos.y, t);
+        for(Point m : movRey){
+            t.colocarFicha(m, Rey);
+            t.removerFicha(pos, Rey);
+            t.actualizarPosFicha(m);
+            if(this.moverJaque(Rey)){
+              t.colocarFicha(pos, Rey);
+              t.removerFicha(m, Rey);
+              t.actualizarPosFicha(pos);
+              posible.add(1);
+            }
+            else{
+                t.colocarFicha(pos, Rey);
+                t.removerFicha(m, Rey);
+                t.actualizarPosFicha(pos);
+                posible.add(0);
+            }
+        }
+        
+        for(int i : posible){
+            System.out.println("hay Jaque?????: " + i);
+            if(i == 0){
+                return false;
+            }
+        }
+        return true;
     }
     
 }
